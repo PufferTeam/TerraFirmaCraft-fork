@@ -2,9 +2,8 @@
   "__comment__": "This file was automatically created by mcresources",
   "replace": false,
   "values": [
-    "#minecraft:logs",
-    "minecraft:grass_block",
-    "#tfc:grass",
-    "#minecraft:base_stone_overworld"
+    "#tfc:bush_plantable_on",
+    "#minecraft:base_stone_overworld",
+    "#minecraft:logs"
   ]
 }

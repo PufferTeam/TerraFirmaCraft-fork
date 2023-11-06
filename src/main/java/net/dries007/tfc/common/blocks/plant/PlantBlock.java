@@ -10,6 +10,7 @@ import java.util.Random;
 
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -20,8 +21,10 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraftforge.common.Tags;
 
 import net.dries007.tfc.client.particle.TFCParticles;
+import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.TFCBlockStateProperties;
 import net.dries007.tfc.config.TFCConfig;
@@ -48,6 +51,24 @@ public abstract class PlantBlock extends TFCBushBlock
         };
     }
 
+    public static PlantBlock createDry(RegistryPlant plant, ExtendedProperties properties)
+    {
+        return new PlantBlock(properties)
+        {
+            @Override
+            public RegistryPlant getPlant()
+            {
+                return plant;
+            }
+
+            @Override
+            public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos)
+            {
+                return isDryBlockPlantable(level.getBlockState(pos.below()));
+            }
+        };
+    }
+
     public static PlantBlock createFlat(RegistryPlant plant, ExtendedProperties properties)
     {
 
@@ -69,6 +90,11 @@ public abstract class PlantBlock extends TFCBushBlock
         };
     }
 
+    public static boolean isDryBlockPlantable(BlockState state)
+    {
+        return Helpers.isBlock(state, BlockTags.SAND) || Helpers.isBlock(state, Tags.Blocks.SAND) || Helpers.isBlock(state, TFCTags.Blocks.BUSH_PLANTABLE_ON);
+    }
+    
     protected PlantBlock(ExtendedProperties properties)
     {
         super(properties);
